@@ -1,0 +1,8 @@
+; we need tables and mnimask
+; 01_ROIStats_bb244_mni.bash will catch these if they do not exist
+; but at least here we get a nice graph
+
+txt/subject_list.txt <- 00_table.bash
+bb244MNI_LPI_2mm.nii.gz <- 00_bb244MNImask.bash
+
+txt/bb244Stats_mni/    <- 01_ROIStats_bb244_mni.bash
