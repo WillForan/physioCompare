@@ -2,7 +2,19 @@
 ; 01_ROIStats_bb244_mni.bash will catch these if they do not exist
 ; but at least here we get a nice graph
 
-txt/subject_list.txt <- 00_table.bash
-bb244MNI_LPI_2mm.nii.gz <- 00_bb244MNImask.bash
+;; need to have run ~/src/restPreproc
+txt/subject_list.txt <- 
+  ./00_table.bash
 
-txt/bb244Stats_mni/    <- 01_ROIStats_bb244_mni.bash
+;; need bb244_coordinate
+bb244MNI_LPI_2mm.nii.gz <- 
+  ./00_bb244MNImask.bash
+
+;; check alignments
+txt/alignments/ <- 
+  ./01.0_inspectAlignments.bash
+
+;; get stats for alignments
+txt/bb244Stats_mni/    <- subject_list.txt, bb244MNI_LPI_2mm.nii.gz
+  ./01_ROIStats_bb244_mni.bash
+

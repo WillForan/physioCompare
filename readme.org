@@ -1,0 +1,39 @@
+* PREREQ
+** data
+   - see ~/src/restPreproc/ to generate rest_preproc_mni.nii.gz (find /data/Luna1/Reward/Rest -name rest_preproc_mni.nii.gz )
+   - need mni template and 244 ROIs
+   the rest we make (see [[*Data]])
+
+** install/using drake
+0.1 install lein and drip 
+ curl https://raw.github.com/technomancy/leiningen/stable/bin/lein > ~/bin/lein
+ curl -L http://drip.flatland.org > ~/bin/drip
+ # add export "PATH=$PATH:~/bin" to .bashrc/.profile/.zshrc/whatever if it's not there
+
+0.2 get drake
+ git clone git@github.com:Factual/drake.git
+ cd drake && lein uberjar
+ echo "export PATH=$PATH:$(pwd)/bin" >> ~/.bashrc
+ . ~/.bashrc
+
+1.0 
+  drake 
+
+** using orgmode
+this file is written for org-mode
+see emacs and http://orgmode.org/worg/index.html
+
+
+* Data
+** Test
+   Process is based on Aarthi's preprocessing (Skynet:Phillips/rest_preproc_redo_AP) which is replicated by scotts (rest_preproc_redo_SM)
+   This is validated with subject =WHO!!?=
+** Files
+   | Drakefile                  | prodedure to make data                              |
+   | bb244MNI_LPI_2mm.nii.gz    | get roi averages for each time point and each bb244 |
+   | bb244_coordinate           | LPI list of coords                                  |
+   | txt/*                      | txt outputs                                         |
+   | txt/subjectInpipelines.txt | breakdown of subjects                               |
+   | txt/bb244Stats_mni/*       | nz means for each ROI (bb244, order as 256)         |
+
+  

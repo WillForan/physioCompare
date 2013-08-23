@@ -9,3 +9,5 @@
 10153_20111128	preproc_torque_nophysio	/data/Luna1/Reward/Rest/10153_20111128/preproc_torque_nophysio/rest_preproc_mni.nii.gz
 10156_20110923	preproc_torque_nophysio	/data/Luna1/Reward/Rest/10156_20110923/preproc_torque_nophysio/rest_preproc_mni.nii.gz
 10153_20100604	preproc_torque_nophysio	/data/Luna1/Reward/Rest/10153_20100604/preproc_torque_nophysio/rest_preproc_mni.nii.gz
+11176_20130703	preproc_torque	/data/Luna1/Reward/Rest/11176_20130703/preproc_torque/rest_preproc_mni.nii.gz
+11185_20130627	preproc_torque	/data/Luna1/Reward/Rest/11185_20130627/preproc_torque/rest_preproc_mni.nii.gz
