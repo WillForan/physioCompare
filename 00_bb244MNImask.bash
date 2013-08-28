@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-unbettedRefBrain="/data/Luna1/ni_tools/standard_templates/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_2mm.nii"
-# N.B. Undumping to this mni brain doesn't work as expected!!
+# get params (from e.g. skynet.cfg)
+scriptdir=$(cd $(dirname $0);pwd)
+source  $scriptdir/$(hostname).cfg
+# loads DataRoot physioppDir nophysioppDir unbettedRefBrain subjexample
 
-subjexample="/data/Luna1/Reward/Rest/10152_20111123/preproc_torque/rest_preproc_mni.nii.gz"
 bb244=bb244MNI_LPI_2mm.nii.gz
 
 ### original bb244 might be bad?

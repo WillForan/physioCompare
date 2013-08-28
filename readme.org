@@ -35,7 +35,8 @@ see emacs and http://orgmode.org/worg/index.html
 * Data
 ** Test
    Process is based on Aarthi's preprocessing (Skynet:Phillips/rest_preproc_redo_AP) which is replicated by scotts (rest_preproc_redo_SM)
-   This is validated with subject =WHO!!?=
+   This is validated with subject 10845. Subject 10152 is different though. See ../rest_preproc_nophysio_withphysiotest
+
 ** Files
    | Drakefile                  | prodedure to make data                              |
    | bb244MNI_LPI_2mm.nii.gz    | get roi averages for each time point and each bb244 |
@@ -43,5 +44,6 @@ see emacs and http://orgmode.org/worg/index.html
    | txt/*                      | txt outputs                                         |
    | txt/subjectInpipelines.txt | breakdown of subjects                               |
    | txt/bb244Stats_mni/*       | nz means for each ROI (bb244, order as 256)         |
+
 
   
