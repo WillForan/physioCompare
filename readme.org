@@ -39,11 +39,14 @@ see emacs and http://orgmode.org/worg/index.html
 
 ** Files
    | Drakefile                  | prodedure to make data                              |
+   | IDSexDOBVisitAge.txt       | subject information                                 |
    | bb244MNI_LPI_2mm.nii.gz    | get roi averages for each time point and each bb244 |
    | bb244_coordinate           | LPI list of coords                                  |
    | txt/*                      | txt outputs                                         |
-   | txt/subjectInpipelines.txt | breakdown of subjects                               |
+   | txt/subjectInpipelines.txt | breakdown of subjects, now used as who to include   |
+   | txt/____                   | long format of each ROI ROI corr for 244 in each subject for all pipelines |
    | txt/bb244Stats_mni/*       | nz means for each ROI (bb244, order as 256)         |
+   | txt/ROIROI_median/         | intermediate output of getCor.jl, median corr for each ROI |
 
 
   
