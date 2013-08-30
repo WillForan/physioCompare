@@ -11,14 +11,23 @@ bb244MNI_LPI_2mm.nii.gz <-
   ./00_bb244MNImask.bash
 
 ;; check alignments
-txt/alignments/ <- 
+imgs/alignments/... <-     [+async]
   ./01.0_inspectAlignments.bash
 
 ;; get ROI averages for each mni aligned brain
-txt/bb244Stats_mni/    <- subject_list.txt, bb244MNI_LPI_2mm.nii.gz
+txt/bb244Stats_mni/...    <- subject_list.txt, bb244MNI_LPI_2mm.nii.gz
   ./01_ROIStats_bb244_mni.bash
 
-;; find the median ROI-ROI correlation
-;; requires julia language JIT
-txt/ROIROI_median/    <- txt/bb244Stats_mni/
+;; requires julia language package
+;; find the median ROI-ROI correlation, save 244x244 matrix to individual pipeline files in ROIROI_median dir
+;; save long fomrat csv (100s of MB) 
+ROIROIcorAgeSubjPipe.csv, txt/ROIROI_median/...    <- txt/bb244Stats_mni/...
   ./getCor.jl
+
+;; model each roi-roi correlation over development
+lmer-perROI-out.Rdata <- ROIROIcorAgeSubjPipe.csv [+async]
+   Rscript comp_perROIROI.R
+
+;; model all roi-roi correlations over development, takes forever
+;;  <- ROIROIcorAgeSubjPipe.csv
+;;    Rscript MultComp_ROIROIPhysAge.R

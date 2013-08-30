@@ -1,13 +1,13 @@
 #!/usr/bin/env julia
 
 # an object to store each subject's visit for each pipeline
-type corrMetaInfo
-  id
-  visit
-  pipeline
-  age
-  existingROIs
-end
+#type corrMetaInfo
+#  id
+#  visit
+#  pipeline
+#  age
+#  existingROIs
+#end
 
 # rows of time samples, columns of regiions. 
 # get the correlation over a sliding window
@@ -130,14 +130,14 @@ for i in 1:length(files)
 
 end
 
-if size(allCor,1) != size(allCor,2) 
+if size(allCorr,1) != size(allCorr,2) 
  println("ERROR: ROI column and row are not the same size!!!")
 end
 
 ## long format: ROI1,ROI2,cor,value,age,pipeline,subj
 i=1
-numROIs=size(allCor,1)
-numVisitsAndPipes=size(allCor,3)
+numROIs=size(allCorr,1)
+numVisitsAndPipes=size(allCorr,3)
 longfmt=Array(Any, binomial(numROIs,2) * numVisitsAndPipes , 6)
 
 for p=1:numVisitsAndPipes # each pipeline of each visit
@@ -149,5 +149,5 @@ for p=1:numVisitsAndPipes # each pipeline of each visit
  end
 end
 
-writedlm("ROIROIcorAgeSubjPipe.csv",longfmt)
+writecsv("ROIROIcorAgeSubjPipe.csv",longfmt)
 
