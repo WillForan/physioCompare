@@ -8,6 +8,8 @@ registerDoMC(cores=5)
 source("lmerCellMeans.R")
 
 
+# only make roirois.long if we have to
+# loading the 100s of MB files take a bit of time
 if(!exists("roirois.long")) {
  cat('reading in giant csv!\n')
  roirois.long<-read.csv('ROIROIcorAgeSubjPipe.csv')
@@ -33,7 +35,7 @@ roirois.long <- roirois.long[!is.nan(roirois.long$value),]
 
 if(file.exists("lmer-perROI-out.Rdata")){
  cat('already have lmer-perROI-out.Rdata, loading from src\n')
- load("lmer-perROI-out.Rdata")
+ load("Rdata/lmer-perROI-out.Rdata")
 }else{
   roirois.lm <- dlply( roirois.long, .(ROI1,ROI2),.parallel=T, function(roiroi) {
     cat("ROI1: ",roiroi$ROI1[1],"; ROI2: ",roiroi$ROI2[1],"\n")
@@ -45,7 +47,7 @@ if(file.exists("lmer-perROI-out.Rdata")){
     )
   })
   cat('saving file: lmer-perROI-out.Rdata\n')
-  save(file="lmer-perROI-out.Rdata",list=c('roirois.lm'))
+  save(file="Rdata/lmer-perROI-out.Rdata",list=c('roirois.lm'))
   cat('saved\n')
 }
 

@@ -1,33 +1,43 @@
+;; we start with a bunch of subjects' mni_preproc_rest.nii.gz
+;; and a list of corridnates -- that are in git
+txt/bb244_coordinate <-
+
+;; label ROIs
+txt/labels_bb244_coordinate <- txt/bb244_coordinate  [+async]
+  ./00_labelROIs.bash
+
 ; we need tables and mnimask
 ; 01_ROIStats_bb244_mni.bash will catch these if they do not exist
 ; but at least here we get a nice graph
 
-;; need to have run ~/src/restPreproc
-txt/subject_list.txt <- 
+;; need to have mni_preproc_rest.nii.gz as defined by $(hostname).cfg
+;; this will list all mni_preproc_rest's avalable to us
+txt/subject_list.txt, txt/subjINpipelines.txt <-  txt/bb244_coordinate   [+async]
   ./00_table.bash
 
-;; need bb244_coordinate
-bb244MNI_LPI_2mm.nii.gz <- 
+
+;; need bb244_coordinate mask in MNI space to apply to everyone
+bb244MNI_LPI_2mm.nii.gz <-  txt/bb244_coordinate [+async]
   ./00_bb244MNImask.bash
 
-;; check alignments
-imgs/alignments/... <-     [+async]
+;; check alignments of the people we will use
+imgs/alignments/... <- txt/subjINpipelines.txt    [+async]
   ./01.0_inspectAlignments.bash
 
 ;; get ROI averages for each mni aligned brain
-txt/bb244Stats_mni/...    <- subject_list.txt, bb244MNI_LPI_2mm.nii.gz
+txt/bb244Stats_mni/...    <- txt/subjINpipelines.txt , bb244MNI_LPI_2mm.nii.gz
   ./01_ROIStats_bb244_mni.bash
 
 ;; requires julia language package
 ;; find the median ROI-ROI correlation, save 244x244 matrix to individual pipeline files in ROIROI_median dir
 ;; save long fomrat csv (100s of MB) 
-ROIROIcorAgeSubjPipe.csv, txt/ROIROI_median/...    <- txt/bb244Stats_mni/...
+txt/ROIROIcorAgeSubjPipe.csv, txt/ROIROI_median/...    <- txt/bb244Stats_mni/...
   ./getCor.jl
 
 ;; model each roi-roi correlation over development
-lmer-perROI-out.Rdata <- ROIROIcorAgeSubjPipe.csv [+async]
+lmer-perROI-out.Rdata <- txt/ROIROIcorAgeSubjPipe.csv [+async]
    Rscript comp_perROIROI.R
 
 ;; model all roi-roi correlations over development, takes forever
-;;  <- ROIROIcorAgeSubjPipe.csv
+;;  <- txt/ROIROIcorAgeSubjPipe.csv
 ;;    Rscript MultComp_ROIROIPhysAge.R
