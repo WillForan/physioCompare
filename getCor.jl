@@ -1,13 +1,13 @@
 #!/usr/bin/env julia
 
 # an object to store each subject's visit for each pipeline
-#type corrMetaInfo
-#  id
-#  visit
-#  pipeline
-#  age
-#  existingROIs
-#end
+type corrMetaInfo
+  id
+  visit
+  pipeline
+  age
+  existingROIs
+end
 
 # rows of time samples, columns of regiions. 
 # get the correlation over a sliding window

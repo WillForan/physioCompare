@@ -1,18 +1,26 @@
 library(plyr)
 library(lme4)
 library(doMC)
-registerDoMC(cores=5)
+registerDoMC(cores=4)
+#library(doParallel)
+#library(foreach)
+#registerDoParallel(makeCluster(4))
+
 
 # lmerCellMeans is MH's lmer groking function
 # not used here yet
 source("lmerCellMeans.R")
+
+# read in ROI names
+roi.lables<-read.table('txt/labels_bb244_coordinate',sep="\t")
+names(roi.lables) <- c('num','x','y','z','atlas','r','name','prob','segnum')
 
 
 # only make roirois.long if we have to
 # loading the 100s of MB files take a bit of time
 if(!exists("roirois.long")) {
  cat('reading in giant csv!\n')
- roirois.long<-read.csv('ROIROIcorAgeSubjPipe.csv')
+ roirois.long<-read.csv('txt/ROIROIcorAgeSubjPipe.csv')
  names(roirois.long) <- c('ROI1','ROI2','value','Age','Pipeline','ID')
 
  roirois.long$ID   <-  as.factor(roirois.long$ID )
@@ -32,25 +40,48 @@ if(abs(mean(roirois.long$AgeInverseCentered)) > 10^-8 ){
 # remove NA (dangerous?), fails otherwise
 roirois.long <- roirois.long[!is.nan(roirois.long$value),]
 
+savefile<-"Rdata/lmer-perROI-out-agec.Rdata"
+txtfile<-"txt/ageeffAgeXphys-agec.csv"
 
-if(file.exists("lmer-perROI-out.Rdata")){
+if(file.exists(savefile)){
  cat('already have lmer-perROI-out.Rdata, loading from src\n')
- load("Rdata/lmer-perROI-out.Rdata")
+ load(savefile)
 }else{
   roirois.lm <- dlply( roirois.long, .(ROI1,ROI2),.parallel=T, function(roiroi) {
+    #library(lme4)  # included because doParallel needs new env
     cat("ROI1: ",roiroi$ROI1[1],"; ROI2: ",roiroi$ROI2[1],"\n")
     list( 
 	ROI1=roiroi$ROI1[1],
 	ROI2=roiroi$ROI2[1],
-	invAge=lmer(value ~ 1 + Pipeline  * AgeInverseCentered + (1 | ID), roiroi, REML=TRUE),
+	#invAge=lmer(value ~ 1 + Pipeline  * AgeInverseCentered + (1 | ID), roiroi, REML=TRUE)
 	age=lmer(value ~ 1 + Pipeline  * AgeCentered + (1 | ID), roiroi, REML=TRUE)
     )
   })
-  cat('saving file: lmer-perROI-out.Rdata\n')
-  save(file="Rdata/lmer-perROI-out.Rdata",list=c('roirois.lm'))
+  cat('saving file: ', savefile,'\n')
+  save(file=savefile,list=c('roirois.lm'))
   cat('saved\n')
 }
-
 # collect all the tvals 
-tvals<-ldply(roirois.lm,.parallel=T, function(x){c(ROI1=x['ROI1'], ROI2=x['ROI2'], tval=summary(x)@coefs[4,3])})
+ageeff.ageXphys <-ldply(roirois.lm,.parallel=T, function(x){
+    #library(lme4)  # included because doParallel needs new env
+    #i=summary(x$invAge)
+    a=summary(x$age)
+    data.frame(
+
+     ROI1=x['ROI1'],
+     ROI2=x['ROI2'],
+     #ageeff.inv=i@coefs[3,1],
+     #Xtval.inv=i@coefs[4,3],
+     ageeff.age=a@coefs[3,1],
+     Xtval.age=a@coefs[4,3],
+     rtitle=paste(collapse=" -  ",
+	      roi.lables[c(
+	       which(roi.lables$num==x['ROI1']),
+	       which(roi.lables$num==x['ROI2']))
+            ,'name'])
+   )   
+ })
+write.csv(file=txtfile,ageeff.ageXphys)
+
+#o <- rev(order(ageeff.ageXphys$Xtval.inv)) 
 
