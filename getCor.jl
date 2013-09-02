@@ -41,7 +41,7 @@ outdir =  "txt/ROIROI_median"
 typebyfilename = { "physio"=> r"mni_AP_redo.1D", "nophysio"=>r"mni_nophysio.1D" }
 
 ## read in ages and make dictionary
-subjinfo = readdlm("txt/IDSexDOBVisitAge.txt",'	', String,ignore_invalid_chars=true);
+subjinfo = readdlm("txt/IDSexDOBVisitAge.txt",'\t', String,ignore_invalid_chars=true);
 subjage = Dict{String,Float64}()
 for i=1:size(subjinfo,1)
  subjage[ subjinfo[i,1] ] = float(subjinfo[i,5])
@@ -76,7 +76,7 @@ for i in 1:length(files)
   ## get age at visit, set to zero if we dont know it
   println(" get age")
   #age = subjage[subj]
-  age  = getkey(subjage,subj,0)
+  age  = get(subjage,subj,0)
 
 
   # parse out which pipeline the file is coming from
