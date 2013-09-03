@@ -34,17 +34,19 @@ if(!exists("roirois.long")) {
 }
 
 # mean should be centered, but could be off by rounding error
-if(abs(mean(roirois.long$AgeInverseCentered)) > 10^-8 ){ 
+if(abs(mean(roirois.long$AgeInverseCentered,na.rm=T)) > 10^(-8) ){ 
   warn('the mean inv age is not zero!!')
 }
 # remove NA (dangerous?), fails otherwise
 roirois.long <- roirois.long[!is.nan(roirois.long$value),]
 
-savefile<-"Rdata/lmer-perROI-out-agec.Rdata"
-txtfile<-"txt/ageeffAgeXphys-agec.csv"
+modelname<-'invage'
+#also change e.g. roirois.lm's ddply creation, a for  ageeff.inv 
+savefile<-sprintf("Rdata/lmer-perROI-out-%s.Rdata",modelname)
+txtfile<-sprintf("txt/ageeffAgeXphys-%s.csv",modelname)
 
 if(file.exists(savefile)){
- cat('already have lmer-perROI-out.Rdata, loading from src\n')
+ cat('already have' , savefile, ', loading from src\n')
  load(savefile)
 }else{
   roirois.lm <- dlply( roirois.long, .(ROI1,ROI2),.parallel=T, function(roiroi) {
@@ -53,8 +55,8 @@ if(file.exists(savefile)){
     list( 
 	ROI1=roiroi$ROI1[1],
 	ROI2=roiroi$ROI2[1],
-	#invAge=lmer(value ~ 1 + Pipeline  * AgeInverseCentered + (1 | ID), roiroi, REML=TRUE)
-	age=lmer(value ~ 1 + Pipeline  * AgeCentered + (1 | ID), roiroi, REML=TRUE)
+	invAge=lmer(value ~ 1 + Pipeline  * AgeInverseCentered + (1 | ID), roiroi, REML=TRUE)
+	#age=lmer(value ~ 1 + Pipeline  * AgeCentered + (1 | ID), roiroi, REML=TRUE)
     )
   })
   cat('saving file: ', savefile,'\n')
@@ -64,16 +66,16 @@ if(file.exists(savefile)){
 # collect all the tvals 
 ageeff.ageXphys <-ldply(roirois.lm,.parallel=T, function(x){
     #library(lme4)  # included because doParallel needs new env
-    #i=summary(x$invAge)
-    a=summary(x$age)
+    i=summary(x$invAge)
+    #a=summary(x$age)
     data.frame(
 
      ROI1=x['ROI1'],
      ROI2=x['ROI2'],
-     #ageeff.inv=i@coefs[3,1],
-     #Xtval.inv=i@coefs[4,3],
-     ageeff.age=a@coefs[3,1],
-     Xtval.age=a@coefs[4,3],
+     ageeff.inv=i@coefs[3,1],
+     Xtval.inv=i@coefs[4,3],
+     #ageeff.age=a@coefs[3,1],
+     #Xtval.age=a@coefs[4,3],
      rtitle=paste(collapse=" -  ",
 	      roi.lables[c(
 	       which(roi.lables$num==x['ROI1']),
