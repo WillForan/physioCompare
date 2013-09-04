@@ -47,7 +47,7 @@ ggsave(file='imgs/groupCorMats.png',mats.plot)
 
 # density plot
 rrdiff.density <- ggplot(coravg,aes(x=value,fill=Pipeline),alpha=I(.5))+geom_density()+facet_wrap(~group) + theme_bw()+ggtitle('value of all roi-roi correlations')
-ggsave(file='group-roiroi-density.png',rrdiff.density)
+ggsave(file='imgs/group-roiroi-density.png',rrdiff.density)
 
 
 coravg.wide = reshape(coravg,idvar=c('ROI1', 'ROI2','group'),timevar='Pipeline',direction='wide')
@@ -57,7 +57,7 @@ rrdiff.plot <- ggplot(coravg.wide,aes(x=value.nophysio,y=value.physio,color=grou
 rrdiff.plot.together <- rrdiff.plot + geom_point(alpha=I(.2))+theme_bw()+geom_abline(intercept=0,slop=1)
 rrdiff.plot.facet   <- rrdiff.plot.together+facet_wrap(~group)
 #ggsave(file="group-roiroi-diff.png",rrdiff.plot)
-png("group-roiroi-diff.png")
+png("imgs/group-roiroi-diff.png")
 print(grid.arrange(rrdiff.plot.together,rrdiff.plot.facet) )
 dev.off()
 #coravg.wide$roi1 <- roi.labels[

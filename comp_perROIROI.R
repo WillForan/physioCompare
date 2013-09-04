@@ -1,4 +1,5 @@
 modelname<-'invage'
+#modelname<-'agec'
 #also change e.g. roirois.lm's ddply creation, a for  ageeff.inv 
 
 library(plyr)
@@ -70,7 +71,7 @@ if(file.exists(savefile)){
 ageeff.ageXphys <-ldply(roirois.lm,.parallel=T, function(x){
     #library(lme4)  # included because doParallel needs new env
     i=summary(x$invAge)
-    #a=summary(x$age)
+    #i=summary(x$age)
     data.frame(
 
      ROI1=x['ROI1'],
