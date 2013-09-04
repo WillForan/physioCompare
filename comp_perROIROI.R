@@ -72,10 +72,19 @@ ageeff.ageXphys <-ldply(roirois.lm,.parallel=T, function(x){
 
      ROI1=x['ROI1'],
      ROI2=x['ROI2'],
-     ageeff.inv=i@coefs[3,1],
-     Xtval.inv=i@coefs[4,3],
-     #ageeff.age=a@coefs[3,1],
-     #Xtval.age=a@coefs[4,3],
+
+     intercept    =i@coefs[1,1],
+     intcpt.tval  =i@coefs[1,3],
+
+     pipe.slope =i@coefs[2,1],
+     pipe.tval  =i@coefs[2,3],
+
+     age.slope  =i@coefs[3,1],
+     age.tval   =i@coefs[3,3],
+
+     ageXphysio.val  =i@coefs[3,1],
+     ageXphysio.tval =i@coefs[4,3],
+
      rtitle=paste(collapse=" -  ",
 	      roi.lables[c(
 	       which(roi.lables$num==x['ROI1']),
