@@ -1,5 +1,7 @@
 library(ggplot2)
+library(plyr)
 library(lme4)
+library(gridExtra)
 source('lmerCellMeans.R')
 
 # read in ROI names
@@ -43,10 +45,21 @@ mats.plot <- ggplot(coravg,aes(x=ROI1,y=ROI2,fill=value))+theme_bw()+
 
 ggsave(file='imgs/groupCorMats.png',mats.plot)
 
+# density plot
+rrdiff.density <- ggplot(coravg,aes(x=value,fill=Pipeline),alpha=I(.5))+geom_density()+facet_wrap(~group) + theme_bw()+ggtitle('value of all roi-roi correlations')
+ggsave(file='group-roiroi-density.png',rrdiff.density)
+
+
 coravg.wide = reshape(coravg,idvar=c('ROI1', 'ROI2','group'),timevar='Pipeline',direction='wide')
 coravg.wide$value.diff <-  coravg.wide$value.physio - coravg.wide$value.nophysio 
-rrdiff.plot <- ggplot(coravg.wide) + geom_point(aes(x=value.nophysio,y=value.physio,color=diff))
-ggsave(file="group-roiroi-diff.png",rrdiff.plot)
+
+rrdiff.plot <- ggplot(coravg.wide,aes(x=value.nophysio,y=value.physio,color=group)) 
+rrdiff.plot.together <- rrdiff.plot + geom_point(alpha=I(.2))+theme_bw()+geom_abline(intercept=0,slop=1)
+rrdiff.plot.facet   <- rrdiff.plot.together+facet_wrap(~group)
+#ggsave(file="group-roiroi-diff.png",rrdiff.plot)
+png("group-roiroi-diff.png")
+print(grid.arrange(rrdiff.plot.together,rrdiff.plot.facet) )
+dev.off()
 #coravg.wide$roi1 <- roi.labels[
 
 
@@ -56,8 +69,7 @@ ggsave(file="group-roiroi-diff.png",rrdiff.plot)
 summary(subjectInfo$age)
 #    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #   10.11   13.05   15.63   15.45   18.33   20.33
-hist.age <- ggplot(subjectInfo)+geom_histogram(aes(x=age),color=I('grey75'),fill=I('grey55'),binsize=2)+geom_histogram(aes(x=age,fill=sex,color=sex),position='dodge',binsize=1) + theme_bw() + ggtitle('Age of participants') + geom_vline(x=c(14,18))
-
+hist.age <- ggplot(subjectInfo)+geom_histogram(aes(x=age),color=I('grey75'),fill=I('grey55'),binwidth=1)+geom_histogram(aes(x=age,fill=sex,color=sex),position='dodge',binwidth=1) + theme_bw() + ggtitle('Age of participants') + geom_vline(x=c(14,18))+scale_x_continuous(limits=c(10,21),breaks=c(10:21))
 ggsave(hist.age,file="imgs/hist-age.png")
 
 
