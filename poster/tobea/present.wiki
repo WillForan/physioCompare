@@ -1,0 +1,105 @@
+<[autotemplate]
+documentclass={beamer}
+usepackage={listings}
+usepackage={wasysym}
+usepackage={graphicx}
+usepackage={multirow}
+title={Flux pre-poster}
+date={\today}
+lstdefinestyle={basic}{....}
+titleframe=False
+usetheme={Amsterdam}
+[autotemplate]>
+
+
+== for flux  ==
+=== Goals  ===
+==== Takehome ====
+* Compare preprocessing rest fMRI with and without physiological metrics
+* model correlations for each roi-roi interaction over age
+** include physio as dummy term, test for interaction
+* highlight which roi-roi connection appears different 
+=== Data ===
+==== Subjects ====
+* From Reward-rest dataset
+* 126 people
+* Age ranges: 13-20
+<<<../../imgs/hist-age.png,height=.5\textheight>>>
+==== ROIs  ====
+* using WashU 244 subset of WashU's 264
+* used afni's whereami (MNI\_ATLAS) to ID
+<<<../../imgs/alignments/10153-UNDERbb244-mni_AP_redo.jpeg,width=\textwidth>>>
+=== Process ===
+==== Pipeline  ====
+* same as aarthi's for rest-reward
+* TODO: illustrate 
+
+==== Correlation ====
+* sliding window median
+** TODO: Citiation, from journel club HBM meeting?
+
+=== Models  ===
+==== Group Model ====
+* 3 groups
+** 10-13 (n=41,$\mu$=11.92)
+** 14-17 (n=48,$\mu$=15.8)
+** 18-21 (n=37,$\mu$=18.8)
+* mean change .012, (min: -.10, max: 0.13)
+==== all matricies  ====
+<<<../../imgs/groupCorMats.png,height=.9\textheight>>>
+==== differences  ====
+<<<../../imgs/group-roiroi-diff.png,height=.9\textheight>>>
+==== most changed ====
+\begin{tiny}
+<[code]
+head(coravg.wide\[rev(order(abs(coravg.wide$diff))),\],n=30)
+ROI1 ROI2 group value.nophysio value.physio       diff
+  6   27 Child    -0.04331967   0.09344119 -0.1367609
+ 23  168 Adult     0.08258194   0.20730904 -0.1247271
+ 32   64 Adult     0.27193359   0.39236306 -0.1204295
+ 23   51 Adult     0.18629966   0.30485202 -0.1185524
+ 27  128 Child     0.08761887   0.20553320 -0.1179143
+ 50   88 Child    -0.02516574   0.08907862 -0.1142444
+ 32  239 Child     0.08509896   0.19857305 -0.1134741
+ 31   67 Adult     0.05087113   0.16373530 -0.1128642
+ 35   90 Child    -0.02012452   0.09190600 -0.1120305
+ 49   73 Adult     0.24616250   0.35676481 -0.1106023
+ 18  246 Adult     0.12444440   0.01493999  0.1095044
+ 27   85 Child    -0.02168261   0.08574136 -0.1074240
+ 18  118 Child     0.10020402   0.20754753 -0.1073435
+ 14   21  Teen    -0.05357496   0.05238391 -0.1059589
+ 53  223 Child     0.10506182   0.21081293 -0.1057511
+ 61  183 Adult     0.21494429   0.32052109 -0.1055768
+ 38   65 Adult     0.15190612   0.25734511 -0.1054390
+ 67  236 Adult     0.19886521   0.30400149 -0.1051363
+ 33  263  Teen     0.11596307   0.22020027 -0.1042372
+ 15   23 Adult     0.31707379   0.42099195 -0.1039182
+103  128 Adult     0.18908540   0.29284035 -0.1037550
+ 38  237 Adult     0.07048368   0.17415323 -0.1036695
+ 74  254 Adult     0.13155530   0.23441380 -0.1028585
+ 53  208 Adult     0.10669869   0.20847530 -0.1017766
+ 23  236 Adult     0.14776628   0.24946194 -0.1016957
+ 31  246 Adult     0.06993489  -0.03175385  0.1016887
+ 76  159 Adult     0.08644338   0.18765871 -0.1012153
+146  258 Child     0.15260694   0.25381335 -0.1012064
+ 76  252 Child     0.18615433   0.28730962 -0.1011553
+ 35   57 Adult     0.11808986   0.21908119 -0.1009913
+[code]>
+\end{tiny}
+==== Linear Model ====
+* value $~$ 1 + Pipeline  * AgeInverseCentered + (1 $|$ ID)
+==== table ====
+\begin{tiny}
+<[code]
+ageTval    Xtval.inv                        rtitle
+ 2.008544 -4.114276 Left Postcentral Gyrus       -  Left Middle Occipital Gyrus     
+ 1.639558 -3.730393 Left Middle Temporal Gyrus   -  Left Fusiform Gyrus             
+ 1.869588  3.703752 Right Superior Orbital Gyrus -  unknown
+-1.727798  3.684745 Left Precuneus               -  Left SMA                        
+ 2.084064 -3.609483 Left Lingual Gyrus           -  Right Inferior Occipital Gyrus  
+ 2.070355 -3.598335 unknown                      -  Right Superior Parietal Lobule  
+[code]>
+\end{tiny}
+==== Model: best tval inv age ====
+<<<../../imgs/lm/ageinv/LPGLMOG.png,height=.9\textheight>>>
+==== Put on suma brain ====
