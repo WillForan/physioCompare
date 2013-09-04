@@ -1,3 +1,6 @@
+modelname<-'invage'
+#also change e.g. roirois.lm's ddply creation, a for  ageeff.inv 
+
 library(plyr)
 library(lme4)
 library(doMC)
@@ -11,6 +14,8 @@ registerDoMC(cores=4)
 # not used here yet
 source("lmerCellMeans.R")
 
+
+
 # read in ROI names
 roi.lables<-read.table('txt/labels_bb244_coordinate',sep="\t")
 names(roi.lables) <- c('num','x','y','z','atlas','r','name','prob','segnum')
@@ -20,7 +25,7 @@ names(roi.lables) <- c('num','x','y','z','atlas','r','name','prob','segnum')
 # loading the 100s of MB files take a bit of time
 if(!exists("roirois.long")) {
  cat('reading in giant csv!\n')
- roirois.long<-read.csv('txt/ROIROIcorAgeSubjPipe.csv')
+ roirois.long<-read.csv(sprintf('txt/ROIROIcorAgeSubjPipe-%s.csv',modelname))
  names(roirois.long) <- c('ROI1','ROI2','value','Age','Pipeline','ID')
 
  roirois.long$ID   <-  as.factor(roirois.long$ID )
@@ -40,8 +45,6 @@ if(abs(mean(roirois.long$AgeInverseCentered,na.rm=T)) > 10^(-8) ){
 # remove NA (dangerous?), fails otherwise
 roirois.long <- roirois.long[!is.nan(roirois.long$value),]
 
-modelname<-'invage'
-#also change e.g. roirois.lm's ddply creation, a for  ageeff.inv 
 savefile<-sprintf("Rdata/lmer-perROI-out-%s.Rdata",modelname)
 txtfile<-sprintf("txt/ageeffAgeXphys-%s.csv",modelname)
 

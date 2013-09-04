@@ -45,7 +45,8 @@ ggsave(file='imgs/groupCorMats.png',mats.plot)
 
 coravg.wide = reshape(coravg,idvar=c('ROI1', 'ROI2','group'),timevar='Pipeline',direction='wide')
 coravg.wide$value.diff <-  coravg.wide$value.physio - coravg.wide$value.nophysio 
-ggplot(coravg.wide) + geom_point(aes(x=value.nophysio,y=value.physio,color=diff))
+rrdiff.plot <- ggplot(coravg.wide) + geom_point(aes(x=value.nophysio,y=value.physio,color=diff))
+ggsave(file="group-roiroi-diff.png",rrdiff.plot)
 #coravg.wide$roi1 <- roi.labels[
 
 
@@ -67,11 +68,7 @@ load('Rdata/lmer-perROI-out-invage.Rdata')
 # easy access to correlation 
 ageeff.ageXphys <- read.csv('txt/ageeffAgeXphys-invage.csv')
 
-# put high t-values up for roi-roi where age is signfig
-o <- rev(order(abs(ageeff.ageXphys$Xtval.inv)*as.numeric(abs(ageeff.ageXphys$ageTval)>1.5) )   ) 
-for(i in o[1:30]) { print(i); print(ageeff.ageXphys[i,]);
-  png(sprintf('imgs/lm/ageinv/%s.png',ageeff.ageXphys[i,'rtitle']));
-  print(
+showplotatindex <- function(i) {
 	ggplot(lmerCellMeans(roirois.lm[[i]]$invAge),aes(x=AgeInverseCentered,y=value,color=Pipeline))+
 	geom_line()+
 	geom_smooth(aes(ymin=plo,ymax=phi),stat='identity')+
@@ -80,7 +77,12 @@ for(i in o[1:30]) { print(i); print(ageeff.ageXphys[i,]);
        	geom_point(data=roirois.lm[[i]]$invAge@frame,aes(label=ID)) + #,x=AgeInverseCentered,y=value)+
 	ggtitle(as.character(ageeff.ageXphys[i,'rtitle']))
 	#ggtitle(paste(as.character(ageeff.ageXphys[i,]),collapse=" - "))
-  );
+}
+# put high t-values up for roi-roi where age is signfig
+o <- rev(order(abs(ageeff.ageXphys$ageXphysio.tval)*as.numeric(abs(ageeff.ageXphys$age.tval)>1.5) )   ) 
+for(i in o[1:30]) { print(i); print(ageeff.ageXphys[i,]);
+  png(sprintf('imgs/lm/ageinv/%s.png',ageeff.ageXphys[i,'rtitle']));
+  print(showplotatindex(i) );
   dev.off()
 }
 
