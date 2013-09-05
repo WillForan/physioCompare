@@ -1,0 +1,14 @@
+# suma will display one niml.do and one 1d.do at a time
+# - display nodes as niml and segements as 1d
+
+### MAKE STUFF
+# generate nodes
+./createROINodes.bash
+# generate segments
+mkSegments.pl
+# all of development
+mkSegments.pl -p 1 -i ../txt/ageeffAgeXphys-invage-develROI.csv 
+
+### SEE STUFF
+# launch afni, suma, load nodes and segments
+./startSuma_chooseSegments.bash
