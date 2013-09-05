@@ -41,7 +41,8 @@ my %opts=(
       #tn=>'.5',                       # min tval
       l=>'5');                         # line width at max
 
-getopts('i:s:p:l:c:',\%opts);
+# b is ballanced spectrum
+getopts('i:s:p:l:c:v:b',\%opts);
 
 
 ### parse inputs
@@ -49,13 +50,18 @@ my $sortField=$opts{s};
 my $valueField=$opts{v};
 my $percent=$opts{p};
 my $maxwidth=$opts{l};
+my $balenced=exists($opts{b})?'balenced':'unbalenced';
 my $maxrad=3;
 my $numcolors=$opts{c};
 my @colors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00');
-my @valcolors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00','#00FFFF');
+# if unbalanced use the same spectrum, otherwise use a spectrum with a middle
+my @valcolors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00');
+if(exists($opts{b})){
+  @valcolors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00','#00FFFF');
+}
 
 ## setup outputs
-my $outid= basename($opts{i},qw/.csv .txt .tsv/)."-$sortField-$valueField-p$percent";
+my $outid= basename($opts{i},qw/.csv .txt .tsv/)."-$balenced-colorby${valueField}_width$sortField-p$percent";
 my $outputDOfilename        = "vis/Edges-$outid.1D.do";
 my $outputNodefilename      = "vis/Nodes-$outid.niml.do";
 my $outputNodeCountfilename = "../txt/nodecounts-$outid.txt";
@@ -141,8 +147,10 @@ for my $ref (@valuessorted) {
 }
 print "edge: tmax:$tvalmax\ttmin: $tvalmin\n    vmax: $valmax\tvmin:$valmin\n";
 # use a balanced spectrum so 0 is at the same place
-$max=$valmax>abs($valmin)?$valmax:abs($valmin);
-$valmin=-$max; $valmax=$max;
+if(exists($opts{b})){
+ $max=$valmax>abs($valmin)?$valmax:abs($valmin);
+ $valmin=-$max; $valmax=$max;
+}
 
 # setup output file
 open my $segmentout, ">", $outputDOfilename;

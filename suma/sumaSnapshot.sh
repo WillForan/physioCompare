@@ -1,17 +1,32 @@
+#!/usr/bin/env bash
+
+# see ./startSuma_chooseSegments.bash to start suma
+# take shots of the brain in suma
+# white F6
+# no Xhair F3
+# full brain (no "p" pushes)
+
 date=$(date +%F-%H:%M)
+
 
 inputref=$1
 [ -z "$inputref" ] && echo 'describe me: ' && read inputref;
 
-DriveSuma -com viewer_cont    -key r   
-DriveSuma -com viewer_cont    -key:3r p   
-DriveSuma -com recorder_cont -save_as ../imgs/suma/$inputref-fullbrain-$date.jpeg
-# most no brain
-DriveSuma -com viewer_cont   -key p -key p -key r
-DriveSuma -com recorder_cont -save_as ../imgs/suma/$inputref-almostnobrain-$date.jpeg
-# no brain
-DriveSuma -com viewer_cont   -key p -key r
-DriveSuma -com recorder_cont -save_as ../imgs/suma/$inputref-nobrain-$date.jpeg
+
+for hem in full half; do 
+ 
+ DriveSuma -com viewer_cont    -key r   
+ DriveSuma -com viewer_cont    -key:3r p
+ DriveSuma -com recorder_cont -save_as ../imgs/suma/$inputref-$hem-fullbrain-$date.jpeg
+ # most no brain
+ DriveSuma -com viewer_cont   -key p -key p -key r
+ DriveSuma -com recorder_cont -save_as ../imgs/suma/$inputref-$hem-almostnobrain-$date.jpeg
+ # no brain
+ DriveSuma -com viewer_cont   -key p -key r
+ [ $hem == full ] && DriveSuma -com recorder_cont -save_as ../imgs/suma/$inputref-nobrain-$date.jpeg
+ DriveSuma -com viewer_cont    -key "]"
+done
+#DriveSuma -com viewer_cont    -key "]"
 # reset
 #DriveSuma -com viewer_cont   -key p -key p
 
