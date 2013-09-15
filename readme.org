@@ -23,7 +23,7 @@ the rest we make (see [[Data]])
  . ~/.bashrc
 #+END_SRC
 
-3. 
+3. run
 
   drake 
 
@@ -31,6 +31,13 @@ the rest we make (see [[Data]])
 this file is written for org-mode
 see emacs and http://orgmode.org/worg/index.html
 
+
+* Analysis
+** Predefined Development ROIs
+   | FEF (174) | SEF (213) |  3.99 | Flat when phsyio regressors not included |
+   | SEF (213) | IFG (241) | 2.832 | Flat when physio regressors not included |
+   |           |           |       |                                          |
+** Highest ageXphysio interaction tvalue
 
 * Data
 ** Test
