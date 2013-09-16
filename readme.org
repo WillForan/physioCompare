@@ -55,5 +55,6 @@ see emacs and http://orgmode.org/worg/index.html
    | txt/bb244Stats_mni/*       | nz means for each ROI (bb244, order as 256)         |
    | txt/ROIROI_median/         | intermediate output of getCor.jl, median corr for each ROI |
 
-
+** Sig
+ see bottom of 03_
   

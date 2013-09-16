@@ -36,10 +36,30 @@ txt/bb244Stats_mni/    <- txt/subjINpipelines.txt , bb244MNI_LPI_2mm.nii.gz
 txt/ROIROIcorAgeSubjPipe.csv, txt/ROIROI_median/  <- txt/bb244Stats_mni/
   ./02_getCor.jl
 
-;; model each roi-roi correlation over development
-txt/ageeffAgeXphys.csv, Rdata/lmer-perROI-out.Rdata <- txt/ROIROIcorAgeSubjPipe.csv [+async]
-   Rscript 03_comp_perROIROI.R
-
 ;; model all roi-roi correlations over development, takes forever
 ;;  <- txt/ROIROIcorAgeSubjPipe.csv
 ;;    Rscript MultComp_ROIROIPhysAge.R
+;; model each roi-roi correlation over development
+
+txt/ageeffAgeXphys-invage.csv, Rdata/lmer-perROI-out.Rdata <- txt/ROIROIcorAgeSubjPipe.csv [+async]
+   Rscript 03_comp_perROIROI.R
+
+;; follow two analyses: data driven (any signficant connections), hypotheses driven (change among selected ROIs)
+;; create Rdata for each
+Rdata/bests.Rdata, Rdata/devel-invage.Rdata <- Rdata/lmer-perROI-out.Rdata, txt/ageeffAgeXphys-invage.csv, txt/develRois.txt
+   Rscript truncateLM.R
+
+;; plot correlation across age for each roi-roi pair
+imgs/lm/ageinv/datadriven/,imgs/lm/ageinv/devel/ <- Rdata/bests.Rdata, Rdata/devel-invage.Rdata, txt/ageeffAgeXphys-invage.csv [+async]
+  Rscript visualizeSubset.R
+
+;; use suma to display nodes and edges on the brain
+;; threshold on value approx p of .01, sort by tvalues, color by value (physyio is change +/- from default)
+imgs/suma/ <- txt/bb244_coordinate, txt/ageeffAgeXphys-invage-develROI.csv, txt/ageeffAgeXphys-invage.csv
+  cd suma
+  ./createROINodes.bash
+  ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -t 2.59 -i ../txt/ageeffAgeXphys-invage.csv
+  ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -p 1    -i ../txt/ageeffAgeXphys-invage-develROI.csv
+  ./startSuma_shootSegments.bash
+
+

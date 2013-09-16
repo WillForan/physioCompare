@@ -100,3 +100,32 @@ write.csv(file=txtfile,ageeff.ageXphys)
 
 #o <- rev(order(ageeff.ageXphys$Xtval.inv)) 
 
+
+### compute p-vals, will take half the day and eat a 10 gigs of ram
+# .0109 -- best.lm 113 == t of -2.564929
+# .0009 -- best.lm 110 == t of -2.598584
+# 
+# getpval(113)$pvals$fixed[4,6]
+#  [1]  0.0109 
+# ageeff$ageXphysio.tval[best.lm.order[113]]
+#  [1] -2.564929
+
+# getpval(110)$pvals$fixed[4,6]
+#  [1] "0.0099"
+# ageeff$ageXphysio.tval[best.lm.order[110]]
+#  [1] -2.598584
+
+# load('Rdata/lmer-perROI-out-invage.Rdata')
+# ageeff <- read.csv('txt/ageeffAgeXphys-invage.csv')
+#library(doMC)
+#library(lme4)
+#library(languageR)
+#library(foreach)
+#registerDoMC(5)
+#l<-length(roirois.lm)
+#l<-10
+##for ( i in 1:l ) { pvals[i] <- pvals.fnc(roirois.lm[[i]]$invAge) }
+#getpval <- function(i){ s<-Sys.time(); l<-list(i=i,pvals=pvals.fnc(roirois.lm[[i]]$invAge)); cat(i,s, Sys.time(),"\n"); return(l)  }
+##eats all the ram
+##pvals <- foreach(i=1:l) %dopar% getpval(i) 
+#save(list='pvals',file='Rdata/lm-invage-pvals.Rdata')

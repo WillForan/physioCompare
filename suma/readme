@@ -9,6 +9,13 @@ mkSegments.pl
 # all of development
 mkSegments.pl -p 1 -i ../txt/ageeffAgeXphys-invage-develROI.csv 
 
+# all that are significant (threshold on t value of 2.59 (p~.01), sort on tval, color based on value
+./mkSegments.pl -t 2.59 -i ../txt/ageeffAgeXphys-invage.csv -s ageXphysio.tval -v ageXphysio.val
+
 ### SEE STUFF
 # launch afni, suma, load nodes and segments
 ./startSuma_chooseSegments.bash
+
+
+## automaticly save stuff
+./startSuma_shootSegments.bash

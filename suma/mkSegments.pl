@@ -36,19 +36,21 @@ my %opts=(
       s=>'ageXphysio.tval',            # sort field
       v=>'ageXphysio.val',             # value field
       p=>'.01',                        # percent shown
+      #t=>'-9999',                     # sort field threshold, intentionally left undefined bu default
       c=>'100',                        # number of colors
       #tx=>'4',                        # max tval
       #tn=>'.5',                       # min tval
       l=>'5');                         # line width at max
 
 # b is ballanced spectrum
-getopts('i:s:p:l:c:v:b',\%opts);
+getopts('i:s:p:l:c:v:t:b',\%opts);
 
 
 ### parse inputs
 my $sortField=$opts{s};
 my $valueField=$opts{v};
 my $percent=$opts{p};
+$precent=1 if exists $opts{t}; # don't truncated data based on percent, but based on a threshold
 my $maxwidth=$opts{l};
 my $balenced=exists($opts{b})?'balenced':'unbalenced';
 my $maxrad=3;
@@ -62,6 +64,7 @@ if(exists($opts{b})){
 
 ## setup outputs
 my $outid= basename($opts{i},qw/.csv .txt .tsv/)."-$balenced-colorby${valueField}_width$sortField-p$percent";
+$outid.="-t$opts{t}" if exists $opts{t};
 my $outputDOfilename        = "vis/Edges-$outid.1D.do";
 my $outputNodefilename      = "vis/Nodes-$outid.niml.do";
 my $outputNodeCountfilename = "../txt/nodecounts-$outid.txt";
@@ -92,8 +95,15 @@ close($modelcsv);
 
 # sort 
 my @valuessorted = sort {$b->{$sortField} <=> $a->{$sortField}} @values; 
+
 # truncate to only use the percent we're told to
-@valuessorted = @valuessorted[0..int($percent*$#valuessorted)];
+if($percent<1) {
+ @valuessorted = @valuessorted[0..int($percent*$#valuessorted)];
+}
+# remove those below (abs of) threshold
+if($opts{t}){
+    @valuesorted = grep {abs($_->{$sortField}) >= $opts{t}} @valuesorted
+}
 
 ## NODES
 # count roi hits
