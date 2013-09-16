@@ -86,7 +86,7 @@ ageeff.ageXphys <-ldply(roirois.lm,.parallel=T, function(x){
      age.slope  =i@coefs[3,1],
      age.tval   =i@coefs[3,3],
 
-     ageXphysio.val  =i@coefs[3,1],
+     ageXphysio.val  =i@coefs[4,1],
      ageXphysio.tval =i@coefs[4,3],
 
      rtitle=paste(collapse=" -  ",
@@ -97,6 +97,17 @@ ageeff.ageXphys <-ldply(roirois.lm,.parallel=T, function(x){
    )   
  })
 write.csv(file=txtfile,ageeff.ageXphys)
+#    X ROI1 ROI2 intercept intcpt.tval pipe.slope pipe.tval age.slope  age.tval ageXphysio.val ageXphysio.tval
+#21618  130  233  0.270628    11.09827 0.03981486  3.188247  1.661884 0.9453313       1.661884        2.59676
+
+#summary(roirois.lm[[21618]]$invAge)
+#   Fixed effects:
+#                                     Estimate Std. Error t value
+#   (Intercept)                        0.27063    0.02438  11.098
+#   Pipelinephysio                     0.03981    0.01249   3.188
+#   AgeInverseCentered                 1.66188    1.75799   0.945
+#   Pipelinephysio:AgeInverseCentered  2.33790    0.90031   2.597
+# 
 
 #o <- rev(order(ageeff.ageXphys$Xtval.inv)) 
 
