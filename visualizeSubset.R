@@ -119,7 +119,7 @@ quit()
 
 if(!exists('best.lm')){
  cat('loading bests.Rdata\n')
- load('Rdata/bests.Rdata')
+ load('Rdata/ageinv-signficantInteraction.Rdata')
  # provides best.lm and best.lm.order
 }
 # truncate ageeff to only get the roi's we need
