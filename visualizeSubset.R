@@ -45,8 +45,8 @@ plotmodelwithpoints <- function(model, gtitle,modeltype='ageinv', modelgroup='de
 	#ggtitle(paste(as.character(ageeff.ageXphys[i,]),collapse=" - "))
         gtitle <- gsub(' ','_',gtitle)
         gtitle <- gsub(':|\\(|\\)','',gtitle,perl=T)
-	ggsave(plot.simple,file=sprintf("imgs/lm/%s/%s/%s-simple.png",modeltype,modelgroup,gtitle))
-	ggsave(plot.all,file=sprintf("imgs/lm/%s/%s/%s-all.png",modeltype,modelgroup,gtitle))
+	ggsave(plot.simple,file=sprintf("imgs/lm/%s/%s/%s-simple.svg",modeltype,modelgroup,gtitle))
+	ggsave(plot.all,file=sprintf("imgs/lm/%s/%s/%s-all.svg",modeltype,modelgroup,gtitle))
 
         #plot.simple
 	#plot.all
@@ -72,32 +72,6 @@ if(!exists('ageeff.ageXphys.orig') || length(ageeff.ageXphys.orig$ROI1xyz)<1) {
   ageeff.ageXphys.orig$ROI2aname <- sapply(ageeff.ageXphys.orig$ROI2, grabaname)
 }
 
-##########################################
-# data driven
-# most significant ROI-ROI interaction
-# see truncateLM.R for generation
-########################################
-
-if(!exists('best.lm')){
- cat('loading bests.Rdata\n')
- load('Rdata/bests.Rdata')
- # provides best.lm and best.lm.order
-}
-# truncate ageeff to only get the roi's we need
-# -- this gives us ROI names and easy access to the tvalue of the interaction
-ageeff.ageXphys <- ageeff.ageXphys.orig[best.lm.order,]
-
-for (i in 1:nrow(ageeff.ageXphys)) {
-  model    <- best.lm[[i]]$invAge
-  gtitle   <- paste(collapse=" - ",as.character(unlist(ageeff.ageXphys[i,c('ROI1aname','ROI2aname')])))
-  gtitle   <- gsub('  *','',gtitle,perl=T) # remove repeated spaces
-  gtitle   <- sprintf('%02d %s (t: %f) ',i, gtitle,abs(ageeff.ageXphys$ageXphysio.tval[i]))
-  #png(sprintf('imgs/lm/ageinv/%s.png',ageeff.ageXphys[i,'rtitle']));
-  print(plotmodelwithpoints(model,gtitle,modelgroup='datadriven') );
-  #dev.off()
-}
-
-quit()
 ##########################################
 # 9 development ROIs -- hypotheses driven
 # see truncateLM.R for generation
@@ -134,5 +108,31 @@ for(i in rev(order(abs(ageeff.ageXphys$ageXphysio.tval))) ) {
   #dev.off()
   j=j+1
   #readline();
+}
+
+quit()
+##########################################
+# data driven
+# most significant ROI-ROI interaction
+# see truncateLM.R for generation
+########################################
+
+if(!exists('best.lm')){
+ cat('loading bests.Rdata\n')
+ load('Rdata/bests.Rdata')
+ # provides best.lm and best.lm.order
+}
+# truncate ageeff to only get the roi's we need
+# -- this gives us ROI names and easy access to the tvalue of the interaction
+ageeff.ageXphys <- ageeff.ageXphys.orig[best.lm.order,]
+
+for (i in 1:nrow(ageeff.ageXphys)) {
+  model    <- best.lm[[i]]$invAge
+  gtitle   <- paste(collapse=" - ",as.character(unlist(ageeff.ageXphys[i,c('ROI1aname','ROI2aname')])))
+  gtitle   <- gsub('  *','',gtitle,perl=T) # remove repeated spaces
+  gtitle   <- sprintf('%02d %s (t: %f) ',i, gtitle,abs(ageeff.ageXphys$ageXphysio.tval[i]))
+  #png(sprintf('imgs/lm/ageinv/%s.png',ageeff.ageXphys[i,'rtitle']));
+  print(plotmodelwithpoints(model,gtitle,modelgroup='datadriven') );
+  #dev.off()
 }
 

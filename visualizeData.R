@@ -43,11 +43,11 @@ mats.plot <- ggplot(coravg,aes(x=ROI1,y=ROI2,fill=value))+theme_bw()+
   scale_fill_gradient2(low = "blue", mid="white", high = "red", limits=c(-1,1))+
   facet_grid(Pipeline~group)
 
-ggsave(file='imgs/groupCorMats.png',mats.plot)
+ggsave(file='imgs/groupCorMats.svg',mats.plot)
 
 # density plot
 rrdiff.density <- ggplot(coravg,aes(x=value,fill=Pipeline),alpha=I(.5))+geom_density()+facet_wrap(~group) + theme_bw()+ggtitle('value of all roi-roi correlations')
-ggsave(file='imgs/group-roiroi-density.png',rrdiff.density)
+ggsave(file='imgs/group-roiroi-density.svg',rrdiff.density)
 
 
 coravg.wide = reshape(coravg,idvar=c('ROI1', 'ROI2','group'),timevar='Pipeline',direction='wide')
@@ -57,7 +57,7 @@ rrdiff.plot <- ggplot(coravg.wide,aes(x=value.nophysio,y=value.physio,color=grou
 rrdiff.plot.together <- rrdiff.plot + geom_point(alpha=I(.2))+theme_bw()+geom_abline(intercept=0,slop=1)
 rrdiff.plot.facet   <- rrdiff.plot.together+facet_wrap(~group)
 #ggsave(file="group-roiroi-diff.png",rrdiff.plot)
-png("imgs/group-roiroi-diff.png")
+svg("imgs/group-roiroi-diff.svg")
 print(grid.arrange(rrdiff.plot.together,rrdiff.plot.facet) )
 dev.off()
 #coravg.wide$roi1 <- roi.labels[
@@ -70,7 +70,7 @@ summary(subjectInfo$age)
 #    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #   10.11   13.05   15.63   15.45   18.33   20.33
 hist.age <- ggplot(subjectInfo)+geom_histogram(aes(x=age),color=I('grey75'),fill=I('grey55'),binwidth=1)+geom_histogram(aes(x=age,fill=sex,color=sex),position='dodge',binwidth=1) + theme_bw() + ggtitle('Age of participants') + geom_vline(x=c(14,18))+scale_x_continuous(limits=c(10,21),breaks=c(10:21))
-ggsave(hist.age,file="imgs/hist-age.png")
+ggsave(hist.age,file="imgs/hist-age.svg")
 
 
 ################## Inv
@@ -91,9 +91,9 @@ showplotatindex <- function(i) {
 	#ggtitle(paste(as.character(ageeff.ageXphys[i,]),collapse=" - "))
 }
 # put high t-values up for roi-roi where age is signfig
-o <- rev(order(abs(ageeff.ageXphys$ageXphysio.tval)*as.numeric(abs(ageeff.ageXphys$age.tval)>1.5) )   ) 
+o <- rev(order(abs(ageeff.ageXphys$ageXphysio.tval)*as.numeric(abs(ageeff.ageXphys$age.tval)>2.569) )   ) 
 for(i in o[1:30]) { print(i); print(ageeff.ageXphys[i,]);
-  png(sprintf('imgs/lm/ageinv/%s.png',ageeff.ageXphys[i,'rtitle']));
+  svg(sprintf('imgs/lm/ageinv/%s.svg',ageeff.ageXphys[i,'rtitle']));
   print(showplotatindex(i) );
   dev.off()
 }

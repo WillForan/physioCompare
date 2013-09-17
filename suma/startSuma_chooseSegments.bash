@@ -49,7 +49,8 @@ echo using specfile $specFile
 # do we want to tie to afni?
 if [ -n "$AFNI" ]; then
    # set nifti file
-   [ -z "$afniFile" ] && afniFile=~/standard/suma_mni/MNI_N27+tlrc # ziad's
+   #[ -z "$afniFile" ] && afniFile=~/standard/suma_mni/MNI_N27+tlrc # ziad's
+   [ -z "$afniFile" ] && afniFile="~/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_csf_tal_nlin_asym_09c.nii"
    #[ -z "$afniFile" ] && afniFile=~/standard/colin27/SUMA/brain.nii    # michael's
    echo using afni $afniFile
 

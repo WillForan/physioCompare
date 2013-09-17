@@ -17,6 +17,10 @@ use Getopt::Std;
 # 
 # generate segments between rois
 #
+#  color field is given by -v
+#  width field is given by -s
+#  thres (-t) or percent (-p) is on field given by -s
+#
 # - read in roi coordinates
 # - get roiXroi model info, match to cooridnates
 # - truncate based on percent that we want to show
@@ -32,43 +36,49 @@ use Getopt::Std;
 #####
 
 my %opts=(
-      i=>'../txt/ageeffAgeXphys-invage.csv', # input/node file
-      s=>'ageXphysio.tval',            # sort field
-      v=>'ageXphysio.val',             # value field
+      #i=>'../txt/ageeffAgeXphys-invage.csv', # input/node file
+      #s=>'ageXphysio.tval',            # sort field
+      #v=>'ageXphysio.val',             # value field
+      #t=>'2.569',                     # sort field abs threshold
       p=>'.01',                        # percent shown
-      #t=>'-9999',                     # sort field threshold, intentionally left undefined bu default
       c=>'100',                        # number of colors
-      #tx=>'4',                        # max tval
-      #tn=>'.5',                       # min tval
-      l=>'5');                         # line width at max
+      1=>'#FF0000',                    # color at the top
+      2=>'#FFFF00',                    # color at the bottom (middle if using three)
+      3=>'#00FFFF',                    # color at the bottom if using three
+      l=>'5'                           # line width at max
+      #b=>exists                       # balanced scale
+      #w=>exists                       # constant line width
+      );    
 
 # b is ballanced spectrum
-getopts('i:s:p:l:c:v:t:b',\%opts);
+getopts('i:s:v:t:p:1:2:3:w:l:b',\%opts);
 
 
 ### parse inputs
 my $sortField=$opts{s};
 my $valueField=$opts{v};
 my $percent=$opts{p};
-$precent=1 if exists $opts{t}; # don't truncated data based on percent, but based on a threshold
+my $usevarwidth=!exists $opts{w};
+$percent=1 if exists $opts{t}; # don't truncated data based on percent, but based on a threshold
 my $maxwidth=$opts{l};
 my $balenced=exists($opts{b})?'balenced':'unbalenced';
 my $maxrad=3;
 my $numcolors=$opts{c};
-my @colors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00');
+my @colors=Color::Spectrum::Multi::generate($numcolors+1,$opts{1},$opts{2});
 # if unbalanced use the same spectrum, otherwise use a spectrum with a middle
-my @valcolors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00');
+my @valcolors=Color::Spectrum::Multi::generate($numcolors+1,$opts{1},$opts{2});
 if(exists($opts{b})){
-  @valcolors=Color::Spectrum::Multi::generate($numcolors+1,'#FF0000','#FFFF00','#00FFFF');
+  @valcolors=Color::Spectrum::Multi::generate($numcolors+1,$opts{1},$opts{2},$opts{3});
 }
 
 ## setup outputs
 my $outid= basename($opts{i},qw/.csv .txt .tsv/)."-$balenced-colorby${valueField}_width$sortField-p$percent";
 $outid.="-t$opts{t}" if exists $opts{t};
-my $outputDOfilename        = "vis/Edges-$outid.1D.do";
-my $outputNodefilename      = "vis/Nodes-$outid.niml.do";
+$outid.="-fixwidth" if exists $opts{w};
+my $outputDOfilename        = "vis/$outid-Edges.1D.do";
+my $outputNodefilename      = "vis/$outid-Nodes.niml.do";
 my $outputNodeCountfilename = "../txt/nodecounts-$outid.txt";
-my $outputSpectrumfilename  = "vis/Spectrum-${outid}";
+my $outputSpectrumfilename  = "vis/${outid}-Spectrum";
 # MAX and MIN will be s/// replace
 
 ## ROIS -- need number and xyz postion
@@ -101,8 +111,8 @@ if($percent<1) {
  @valuessorted = @valuessorted[0..int($percent*$#valuessorted)];
 }
 # remove those below (abs of) threshold
-if($opts{t}){
-    @valuesorted = grep {abs($_->{$sortField}) >= $opts{t}} @valuesorted
+if(exists $opts{t}){
+    @valuessorted = grep {abs($_->{$sortField}) >= $opts{t}} @valuessorted 
 }
 
 ## NODES
@@ -167,7 +177,7 @@ open my $segmentout, ">", $outputDOfilename;
 print $segmentout "#segments\n";
 
 # loop through all the values we want to see (top $opt{p} percent)
-my $i=0;
+my $i=-1;
 while($i++ < $totalused ){
  # get the color for this guy
  my $tvalue=$valuessorted[$i]->{$sortField};
@@ -179,7 +189,10 @@ while($i++ < $totalused ){
  # suma wants r g b each as a value from 0 to 1
  my @rgb=map {$_/256} @{Number::RGB::rgb( Number::RGB->new( hex=> $valcolors[$colorstep] ) ) };
  # print endpoints (both cords) color (r g b) opacity and width
- my $width= ($tvalue-$tvalmin)/($tvalmax-$tvalmin) * $maxwidth + .1;
+ my $width= $usevarwidth?( ($tvalue-$tvalmin)/($tvalmax-$tvalmin) * $maxwidth + .1 ):$maxwidth;
+ 
+ # check output
+ print sprintf("%02d: %.2f for %.2f, %02d (%.2f %.2f %.2f) for %.2f\n",$i,$width,$tvalue,$colorstep,@rgb,$value);
  print $segmentout join(" ",@{$valuessorted[$i]}{qw/ROI1xyz ROI2xyz/}, @rgb, 1, $width),"\n";
 }
 close($segmentout);
@@ -211,6 +224,9 @@ print <<HEREDOC
  $outputNodefilename;
  $outputNodeCountfilename;
  $outputSpectrumfilename
+ 
+ # now run
+ ./startSuma_screenShots.bash vis/$outid
 HEREDOC
 
 
