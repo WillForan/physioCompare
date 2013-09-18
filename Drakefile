@@ -61,5 +61,6 @@ imgs/suma/ <- txt/bb244_coordinate, txt/ageeffAgeXphys-invage-develROI.csv, txt/
   ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -t 2.59 -i ../txt/ageeffAgeXphys-invage.csv
   ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -p 1    -i ../txt/ageeffAgeXphys-invage-develROI.csv
   ./startSuma_shootSegments.bash
-
+  ;; convert -alpha on {nobrain,full-opaquebrain}-allROIwithColor-ageeffAgeXphys-invage-sigcluster-unbalenced-colorbyclusterID_widthageXphysio.tval-p1.jpg -compose dissolve  -define compose:args=20  -composite  sigclust-all.jpg
+  ;; convert -alpha on nobrain-allROIwithColor-ageeffAgeXphys-invage-develROI-balenced-colorbyageXphysio.val_widthageXphysio.tval-p1.jpg  full-opaquebrain-blackROI-ageeffAgeXphys-invage-develROI-balenced-colorbyageXphysio.val_widthageXphysio.tval-p1.jpg    -compose dissolve  -define compose:args=20  -composite  devel-all.png 
 
