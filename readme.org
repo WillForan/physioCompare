@@ -1,6 +1,8 @@
 * PREREQ
 ** data
-   - see ~/src/restPreproc/ to generate rest_preproc_mni.nii.gz (find /data/Luna1/Reward/Rest -name rest_preproc_mni.nii.gz )
+   - for physio see https://github.com/WillForan/processPhysio_matlab/blob/master/physio_proc_wallace.m
+   - for preprocessing see local
+     - see ~/src/restPreproc/ to generate rest_preproc_mni.nii.gz (find /data/Luna1/Reward/Rest -name rest_preproc_mni.nii.gz )
    - need mni template and 244 ROIs
   
 the rest we make (see [[Data]])
