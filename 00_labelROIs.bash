@@ -16,9 +16,16 @@ space=MNI_ANAT
 output=txt/labels_$(basename $coordfile)
 [ -d $(dirname $output) ] || mkdir -p $(dirname $output)
 
+# bsd uniq does not have -w 3 --- compare only the first 3 chars
+# want this to display only the closest name to provided point
+uniq=uniq
+which guniq && uniq=guniq
+
+
+
 cat $coordfile|
  while read x y z n; do
    whereami "$x" "$y" "$z" -lpi -space $space -atlas $atlas -tab -max_search_radius 2 2>/dev/null|
     (grep 'CA_ML'||echo -e "$atlas\t-1\tunknown\t0\t0")|
-    sed "s/^/$n   $x $y $z	/";
-  done | uniq -w 7 |tee $output |column -ts"	"
+    sed "s/^/$n	$x	$y	$z	/";
+  done | $uniq -w 3 |tee $output |column -ts"	"

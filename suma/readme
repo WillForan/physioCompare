@@ -1,0 +1,33 @@
+# suma will display one niml.do and one 1d.do at a time
+# - display nodes as niml and segements as 1d
+
+### MAKE STUFF
+# generate nodes
+./createROINodes.bash
+# generate segments
+mkSegments.pl
+
+# all that are significant (threshold on t value of 2.596 (p~.01), sort on tval, color based on value
+./mkSegments.pl -t 2.596 -i ../txt/ageeffAgeXphys-invage.csv -s ageXphysio.tval -v ageXphysio.val
+
+#### data drivin with clusters
+# get clusters
+#   cd ..
+#   Rscript clusterizeSubsets.R
+## fixed width
+./mkSegments.pl -p1 -i ../txt/ageeffAgeXphys-invage-sigcluster.csv -s ageXphysio.tval -v clusterID -1 1985ee -2 cb0500 -w -l 2
+## wider if interaction more sig
+./mkSegments.pl -p1 -i ../txt/ageeffAgeXphys-invage-sigcluster.csv -s ageXphysio.tval -v clusterID -2 1985ee -1 cb0500 -l 2
+
+# all of development
+mkSegments.pl -p 1 -i ../txt/ageeffAgeXphys-invage-develROI.csv -s ageXphysio.tval -v ageXphysio.val
+
+### SEE STUFF
+# launch afni, suma, load nodes and segments
+#./startSuma_chooseSegments.bash
+
+
+## take a ton of screen shots in suma
+./startSuma_shootSegments.bash vis/ageeffAgeXphys-invage-sigcluster-unbalenced-colorbyclusterID_widthageXphysio.tval-p1
+./startSuma_shootSegments.bash vis/ageeffAgeXphys-invage-unbalenced-colorbyageXphysio.val_widthageXphysio.tval-p1-t2.596
+./startSuma_shootSegments.bash vis/ageeffAgeXphys-invage-unbalenced-colorbyageXphysio.val_widthageXphysio.tval-p1-t2.596

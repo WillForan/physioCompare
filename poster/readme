@@ -1,0 +1,45 @@
+SHOW:
+
+ Including physio regressors changes estimated roi-roi interaction over development
+   - in network of 9 highlighted roi's sensitive to development 
+   - over whole brain (244 rois), top .1% 
+ 
+IMAGES:
+
+  ../imgs/lm/ageinv/devel/     correlation by age via linear model:
+  ../imgs/suma/                ROIs/connections on suma brain
+
+  * roi-roi correlation by age
+    - ordered by pipeline*slope interaction signficance (slope between w/ and w/o physio most different)
+    - inv age model, ploted with age linear
+
+  * suma brains
+    - nodes are rois 
+      - black equal sized 
+      - colored and sized by number of connections
+         - useful when looking at eg. only top .1% of signficant slope differences
+	 - useless over selected 9 development ROIs
+    - edges colored by
+      - t value
+      - difference in slope between w/ and w/o physio
+    - brain
+      - full but transparent mesh
+      - no brain (just network)
+      - one hemisphere not shown
+
+TODO:
+ - decided on suma images to show
+    - half brain, no brain, transparent brain?
+    - edge color represntation: t-value or changeinslope
+       - do edge weight is t, color is slope change ?
+
+ - connect roi-roi R plots to suma nodes
+
+ - illustrate pipeline
+
+ - text
+
+
+CITATIONS:
+
+  ../citations
