@@ -36,7 +36,7 @@ end
 
 # settings
 basedir = "txt/bb244Stats_mni/"
-outdir =  "txt/ROIROI_median"
+outdir =  "txt/ROIROI_cor"        #"txt/ROIROI_median"  
 # where in the file name are bits stored
 typebyfilename = { "physio"=> r"mni_AP_redo.1D", "nophysio"=>r"mni_nophysio.1D" }
 
@@ -107,7 +107,12 @@ for i in 1:length(files)
     # yeilds 264x264 matrix
     # put in one for each subject
     println(" get median")
-    allCorr[:,:,i] = mapslices(nanmedian,rollingcors(oned,10),3)
+    # get median of rolling correlation
+    #allCorr[:,:,i] = mapslices(nanmedian,rollingcors(oned,15),3)
+    # just use the correlation
+
+    # just normal median
+    allCorr[:,:,i] = cor(oned, :])
 
     # save data from any other program to open
     println(" save output")
