@@ -103,16 +103,16 @@ for i in 1:length(files)
     oned = float(oned_string[:,2:end])
     
     
-    # median of each ROIvROI interaction over a sliding window
-    # yeilds 264x264 matrix
-    # put in one for each subject
-    println(" get median")
-    # get median of rolling correlation
+    ## median of each ROIvROI interaction over a sliding window
+    ## yeilds 264x264 matrix
+    ## put in one for each subject
+    #println(" get median")
+    ## get median of rolling correlation
     #allCorr[:,:,i] = mapslices(nanmedian,rollingcors(oned,15),3)
-    # just use the correlation
 
-    # just normal median
-    allCorr[:,:,i] = cor(oned, :])
+    # just normal correl
+    println("get cor")
+    allCorr[:,:,i] = cor(oned)
 
     # save data from any other program to open
     println(" save output")
