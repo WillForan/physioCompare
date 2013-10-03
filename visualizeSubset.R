@@ -1,6 +1,8 @@
 library(lme4)
 library(ggplot2)
 library(plyr)
+#library(gridExtra)
+#library(grid)
 source('lmerCellMeans.R')
 # TODO: languageR pmpc p test
 
@@ -45,8 +47,10 @@ plotmodelwithpoints <- function(model, gtitle,modeltype='ageinv', modelgroup='de
 	#ggtitle(paste(as.character(ageeff.ageXphys[i,]),collapse=" - "))
         gtitle <- gsub(' ','_',gtitle)
         gtitle <- gsub(':|\\(|\\)','',gtitle,perl=T)
-	ggsave(plot.simple,file=sprintf("imgs/lm/%s/%s/%s-simple.svg",modeltype,modelgroup,gtitle))
-	ggsave(plot.all,file=sprintf("imgs/lm/%s/%s/%s-all.svg",modeltype,modelgroup,gtitle))
+	savedir=sprintf("imgs/lm/%s/%s",modeltype,modelgroup)
+        if(! file.exists(savedir)) { dir.create(savedir,recursive=T) }
+	ggsave(plot.simple,file=sprintf("%s/%s-simple.svg",savedir,gtitle))
+	ggsave(plot.all,file=sprintf("%s/%s-all.svg",savedir,gtitle))
 
         #plot.simple
 	#plot.all
@@ -110,7 +114,6 @@ for(i in rev(order(abs(ageeff.ageXphys$ageXphysio.tval))) ) {
   #readline();
 }
 
-quit()
 ##########################################
 # data driven
 # most significant ROI-ROI interaction
