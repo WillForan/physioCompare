@@ -10,7 +10,6 @@ best.lm.order <- ageeff.sigidx[ rev(order(ageeff$ageXphysio.tval[ageeff.sigidx])
 best.lm <- roirois.lm[best.lm.order]
 save(list=c('best.lm','best.lm.order'),file="Rdata/ageinv-signficantInteraction.Rdata")
 
-quit()
 develrois<-c(78,100,174,190,213,215,230,232,241) # sort -n develRois.txt|cut -f1 -d' ' |tr '\n' ','
 develidx <- which( (ageeff$ROI1 %in% develrois ) & ( ageeff$ROI2 %in% develrois) )
 devel.lm <- roirois.lm[develidx]

@@ -26,7 +26,9 @@ names(roi.lables) <- c('num','x','y','z','atlas','r','name','prob','segnum')
 # loading the 100s of MB files take a bit of time
 if(!exists("roirois.long")) {
  cat('reading in giant csv!\n')
- roirois.long<-read.csv(sprintf('txt/ROIROIcorAgeSubjPipe-%s.csv',modelname))
+ roirois.long<-read.csv(sprintf('txt/ROIROIcorAgeSubjPipe.csv'))
+ # why was this modelname before?
+ #roirois.long<-read.csv(sprintf('txt/ROIROIcorAgeSubjPipe-%s.csv',modelname))
  names(roirois.long) <- c('ROI1','ROI2','value','Age','Pipeline','ID')
 
  roirois.long$ID   <-  as.factor(roirois.long$ID )

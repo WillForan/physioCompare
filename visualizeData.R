@@ -8,6 +8,8 @@ source('lmerCellMeans.R')
 roi.lables<-read.table('txt/labels_bb244_coordinate',sep="\t")
 names(roi.lables) <- c('num','x','y','z','atlas','r','name','prob','segnum')
 
+if(! file.exists('imgs')) { dir.create('imgs') }
+
 ### SUBJ INFO
 # subject info, like
 # 10152	female	19930510	20100514	17.0106278777989
@@ -72,6 +74,9 @@ summary(subjectInfo$age)
 hist.age <- ggplot(subjectInfo)+geom_histogram(aes(x=age),color=I('grey75'),fill=I('grey55'),binwidth=1)+geom_histogram(aes(x=age,fill=sex,color=sex),position='dodge',binwidth=1) + theme_bw() + ggtitle('Age of participants') + geom_vline(x=c(14,18))+scale_x_continuous(limits=c(10,21),breaks=c(10:21))
 ggsave(hist.age,file="imgs/hist-age.svg")
 
+### BELOW done by visualizeSubset.R
+# so we can skip
+quit() # press c 
 
 ################## Inv
 # linear age models, roirois.lm is a list of lm models
