@@ -29,6 +29,11 @@ the rest we make (see [[Data]])
 
   drake 
 
+** Brain Viewer
+matlab /octave(?): BrainNet.m
+http://www.nitrc.org/projects/bnv/
+
+
 ** using orgmode
 this file is written for org-mode
 see emacs and http://orgmode.org/worg/index.html
