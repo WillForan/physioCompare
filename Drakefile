@@ -49,6 +49,10 @@ txt/ageeffAgeXphys-invage.csv, Rdata/lmer-perROI-out.Rdata <- txt/ROIROIcorAgeSu
 Rdata/bests.Rdata, Rdata/devel-invage.Rdata <- Rdata/lmer-perROI-out.Rdata, txt/ageeffAgeXphys-invage.csv, txt/develRois.txt
    Rscript truncateLM.R
 
+;; use brainviewer matlab app to draw some pictures
+imgs/wholebrain/allsignchanges.png, txt/brainview/ <- txt/ageeffAgeXphys-invage.csv, txt/labels_bb244_coordinate [+async]
+matlab -nodesktop -nojvm -r ohfive_brainviewImages.m
+
 ;; plot correlation across age for each roi-roi pair
 imgs/lm/ageinv/datadriven/,imgs/lm/ageinv/devel/ <- Rdata/bests.Rdata, Rdata/devel-invage.Rdata, txt/ageeffAgeXphys-invage.csv [+async]
   Rscript visualizeSubset.R
