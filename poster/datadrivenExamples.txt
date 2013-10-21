@@ -1,0 +1,5 @@
+physioDown_NoPhysioUp    45_LeftSMA-RightLingualGyrus_t_3.323755_-simple.
+physioDown_NoPhysioFlat  08_RightSuperiorMedialGyrus-CerebellarVermis_t_3.879403_-simple
+physioUp_NoPhysioDown    503_RightSuperiorFrontalGyrus-RightMiddleTemporalGyrus_t_2.846228_-simple
+physioUp_NoPhysioFlat    513_LeftSuperiorFrontalGyrus-RightMedialTemporalPole_t_3.085039_-simple
+physioFlat_NoPhysioUP    38_LeftAngularGyrus-LeftSuperiorMedialGyrus_t_3.360361_-simple

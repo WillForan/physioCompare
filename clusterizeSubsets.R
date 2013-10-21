@@ -1,11 +1,13 @@
 library(mclust)
 library(lme4)
+library(foreach)
+library(ggplot2)
 
 # load model values
 ageeff.ageXphys.orig <- read.csv('txt/ageeffAgeXphys-invage.csv')
 
 # t>2.580 is approx p=.01 (see 03_comp_perROIROI.R)
-ageeff.ageXphys <- subset(ageeff.ageXphys.orig, abs(ageXphysio.tval)>2.596)
+ageeff.ageXphys <- subset(ageeff.ageXphys.orig, abs(ageXphysio.tval)>2.58)
 #ageeff.ageXphys.orig[21618,1:11]
 #    X ROI1 ROI2 intercept intcpt.tval pipe.slope pipe.tval age.slope  age.tval ageXphysio.val ageXphysio.tval
 #21618  130  233  0.270628    11.09827 0.03981486  3.188247  1.661884 0.9453313       2.33790          2.59676
@@ -35,11 +37,16 @@ write.csv(ageeff.ageXphys, file="txt/ageeffAgeXphys-invage-sigcluster.csv")
 
 ## see it
 plot(clusters,legendArgs=list(x="bottomleft",horiz=TRUE ,cex=0.75))
-svg('imgs/clusterplot')
-mclust2Dplot(coeffsToCluster, classification=clustsummary$classification, parameterse=clustsummary$parameters)
+svg('imgs/clusterplot.svg')
+mclust2Dplot(coeffsToCluster, classification=clustsummary$classification, parameterse=clustsummary$parameters,colors=c('#cb0500','#1985ee','#1990ff'))
+dev.off()
 
 
 mcM<-mclustModel(coeffsToCluster,clusters)
+
+assignments <- rle(sort(apply(mcM$z,1,which.max)))
+cat('binned like:', assignments$lengths, '\n')
+
 clustmean <- mcM$parameters$mean
 clustmean <- as.data.frame( rbind('nophysio'=clustmean[1,],'physio'=apply(clustmean,2,sum) ) )
 names(clustmean) <- gsub('^V','Cluster ',names(clustmean))

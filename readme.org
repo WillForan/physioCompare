@@ -63,5 +63,12 @@ see emacs and http://orgmode.org/worg/index.html
    | txt/ROIROI_median/         | intermediate output of getCor.jl, median corr for each ROI |
 
 ** Sig
- see bottom of 03_
+using |t|>2.58
+see bottom of 03_comp_perROIROI.R
   
+** Changes
+*** 10 TR sliding window correlation median,
+  - all signficant ROI-ROI: 246+, 110- (inv age) 
+  - developmental ROI-ROI signficant interactions were limited to SEF correlation to FEF and IFG
+*** all steps correlated
+  - developmental ROI-ROI signficant interactions were limited to FEF to  Putanment and dACC

@@ -15,9 +15,13 @@ function brainviews = ohfive_brainviewImages()
   %x y z number/name
   % nodes_raw=dlmread('txt/bb244_coordinate');
   % n x y z atlas r label '---' p
-  fid=fopen('txt/labels_bb244_coordinate'); 
+  %  perl -slane 'BEGIN{$i=1} while($i<$F[0]){print join("\t",$i,(0)x3,"none",0,"none"," --- ",0) ; $i++} print; $i++' txt/labels_bb244_coordinate > txt/labels_bb
+  %  244_coordinate_continous
+  fid=fopen('txt/labels_bb244_coordinate_continous'); 
   nodes_cell=textscan(fid,'%d\t%d\t%d\t%d\t%s\t%f\t%s\t%s\t%d','delimiter', '\t');
   fclose(fid);
+  
+
   nodes=nodes_cell([2:4,7]); % x y z label
   
   %% READ IN ROI-ROI models (Edges)
@@ -78,10 +82,10 @@ function brainviews = ohfive_brainviewImages()
   for thresh=[-1 1]*sigthresh;
     if(thresh>0)
      threshfun=@(x) x>thresh;
-     name='sigpos'
+     name='sigpos';
     else
      threshfun=@(x) x<thresh;
-     name='signeg'
+     name='signeg';
     end
     [idx,tval]=find(threshfun(roiroi_invage_cell{edgeTvalIdx}));
     [edgesmat,roiCount] = getEdges(idx);
@@ -109,7 +113,7 @@ function brainviews = ohfive_brainviewImages()
   % order by count
   [roiCount_sorted,rcidx ] =sort(roiCount,'descend');
   % get edges again, but only for connections within the top rois
-  idx=find(all(ismember([ roiroi_invage_cell{2} roiroi_invage_cell{3} ], rcidx(1:numberoftop)),2))
+  idx=find(all(ismember([ roiroi_invage_cell{2} roiroi_invage_cell{3} ], rcidx(1:numberoftop)),2));
   [edgesmat,roiCount] = getEdges(idx);
   dlmwrite(topedgesfilename,edgesmat,'\t');
 
@@ -123,7 +127,7 @@ function brainviews = ohfive_brainviewImages()
 
   % show what we did
   fprintf('top %d value (roi#%d): %d==%d connections\n',numberoftop,rcidx(numberoftop),roiCount_sorted(numberoftop),roiCount(rcidx(numberoftop)) );
-  fprintf('found %d edges that matches\n', length(idx))
+  fprintf('found %d edges that match top (rank, count, sorted)\n', length(idx))
   [rcidx(1:numberoftop) roiCount(rcidx(1:numberoftop)) roiCount_sorted(1:numberoftop)]
 
   %name=sprintf('top-%d', numberoftop);
@@ -156,8 +160,9 @@ function brainviews = ohfive_brainviewImages()
   dlmwrite(develedgefile,edgesmat,'\t');
   %roi t values
   roi_tval=reshape(getfield(cell2mat(cellfun(@double,roiroi_invage_cell([2,3,11]),'UniformOutput',false)), {idx,[1,3,2,3]} )', 2,length(idx)*2)';
-  numroi=max(nodes_cell{1})
   roi_tval=[roi_tval;[1:264;repmat(0,1,264) ]' ];
+  %numroi=max(nodes_cell{1});
+  %roi_tval=[roi_tval;[1:numroi;repmat(0,1,numroi) ]' ];
   % get min pval for each node 
   % invert so sig .01 --> 100 and bigger (for thresholding)
   minpval=@(i) arrayfun(@(x) 1/min(1 - tcdf(abs(roi_tval( find(roi_tval(:,1)==x), 2 )),110 )),i);
@@ -250,6 +255,12 @@ function brainviews = ohfive_brainviewImages()
       node_size=colorfunction(k);
       % label cannot have  spaces
       label=strrep(strtrim(nodes{4}{i}),' ' ,'');
+
+      % change label
+      if(exist('develRoisIdx','var') && ismember(k,develRoisIdx) )
+       n=ismember(develRoisIdx,k);
+       label=develRoisCell{2}{n};% rename aprori rois to be more friendly
+      end
 
       continuousNodes{k}= { nodes{1}(i),nodes{2}(i),nodes{3}(i),node_color,node_size,label };
       %fprintf(fid,'%d\t%d\t%d\t\t%d\t%d\t%s\n',continuousNodes(i));

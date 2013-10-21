@@ -57,13 +57,24 @@ matlab -nodesktop -nojvm -r ohfive_brainviewImages.m
 imgs/lm/ageinv/datadriven/,imgs/lm/ageinv/devel/ <- Rdata/bests.Rdata, Rdata/devel-invage.Rdata, txt/ageeffAgeXphys-invage.csv [+async]
   Rscript visualizeSubset.R
 
+;; Visualize clustering of roi-roi changes
+imgs/clusterplot.svg,imgs/cluster-slopes.svg <- txt/ageeffAgeXphys-invage.csv [+async]
+  Rscript clusterizeSubsets.R
+
+imgs/highlyconnected-histogram.svg <- txt/ageeffAgeXphys-invage.csv [+async]
+  Rscript highlyConnectedNodes.R
+
 ;; use suma to display nodes and edges on the brain
 ;; threshold on value approx p of .01, sort by tvalues, color by value (physyio is change +/- from default)
 imgs/suma/ <- txt/bb244_coordinate, txt/ageeffAgeXphys-invage-develROI.csv, txt/ageeffAgeXphys-invage.csv
   cd suma
   ./createROINodes.bash
-  ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -t 2.59 -i ../txt/ageeffAgeXphys-invage.csv
+  ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -t 2.58 -i ../txt/ageeffAgeXphys-invage.csv
   ./mkSegments.pl -s ageXphysio.tval -v ageXphysio.val -p 1    -i ../txt/ageeffAgeXphys-invage-develROI.csv
+
+  ./startSuma_screenShots.bash vis/ageeffAgeXphys-invage-unbalenced-colorbyageXphysio.val_widthageXphysio.tval-p1-t2.58
+  ./startSuma_screenShots.bash vis/ageeffAgeXphys-invage-develROI-unbalenced-colorbyageXphysio.val_widthageXphysio.tval-p1
+
   ./startSuma_shootSegments.bash
   ;; convert -alpha on {nobrain,full-opaquebrain}-allROIwithColor-ageeffAgeXphys-invage-sigcluster-unbalenced-colorbyclusterID_widthageXphysio.tval-p1.jpg -compose dissolve  -define compose:args=20  -composite  sigclust-all.jpg
   ;; convert -alpha on nobrain-allROIwithColor-ageeffAgeXphys-invage-develROI-balenced-colorbyageXphysio.val_widthageXphysio.tval-p1.jpg  full-opaquebrain-blackROI-ageeffAgeXphys-invage-develROI-balenced-colorbyageXphysio.val_widthageXphysio.tval-p1.jpg    -compose dissolve  -define compose:args=20  -composite  devel-all.png 
