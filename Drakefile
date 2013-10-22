@@ -61,8 +61,11 @@ imgs/lm/ageinv/datadriven/,imgs/lm/ageinv/devel/ <- Rdata/bests.Rdata, Rdata/dev
 imgs/clusterplot.svg,imgs/cluster-slopes.svg <- txt/ageeffAgeXphys-invage.csv [+async]
   Rscript clusterizeSubsets.R
 
-imgs/highlyconnected-histogram.svg <- txt/ageeffAgeXphys-invage.csv [+async]
+imgs/highlyconnected-histogram.svg,txt/brainview/nodes-topnodesonly.node <- txt/ageeffAgeXphys-invage.csv,txt/brainview/nodes-264_all-withsize.node [+async]
   Rscript highlyConnectedNodes.R
+  ;; now that we know what nodes are on top, color and size an roi picture
+  ;; matlab -nodesktop -nojvm "BrainNet_MapCfg('txt/brainview/nodes-topnodesonly.node','/home/foranw/src/pkg/brainNetViewer/BrainNetViewer/Data/SurfTemplate/BrainMesh_ICBM152.nv','txt/brainview/topnodeModule.mat','imgs/wholebrain/onlytopnodes.png')"
+
 
 ;; use suma to display nodes and edges on the brain
 ;; threshold on value approx p of .01, sort by tvalues, color by value (physyio is change +/- from default)

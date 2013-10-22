@@ -47,6 +47,10 @@ see emacs and http://orgmode.org/worg/index.html
 ** Highest ageXphysio interaction tvalue
 
 * Data
+** Physio
+https://github.com/WillForan/processPhysio_matlab
+** Rest
+https://github.com/LabNeuroCogDevel/restPreproc
 ** Test
    Process is based on Aarthi's preprocessing (Skynet:Phillips/rest_preproc_redo_AP) which is replicated by scotts (rest_preproc_redo_SM)
    This is validated with subject 10845. Subject 10152 is different though. See ../rest_preproc_nophysio_withphysiotest
