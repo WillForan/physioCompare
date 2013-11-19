@@ -3,7 +3,7 @@
 7	17	-28	-17	CA_ML_18_MNIA  	1.0	Right Cerebellum                	 ---	96 
 12	34	38	-12	CA_ML_18_MNIA  	0.0	Right Inferior Frontal Gyrus (p. Orbitalis)	 ---	16 
 13	-7	-52	61	CA_ML_18_MNIA  	0.0	Left Precuneus                  	 ---	67 
-14	-14	-18	40	CA_ML_18_MNIA	-1	unknown	0	0
+14	-14	-18	40	CA_ML_18_MNIA	-1	unknown	0	0 (Left Mid Cingulate)
 15	0	-15	47	CA_ML_18_MNIA  	0.0	Left Middle Cingulate Cortex    	 ---	33 
 16	10	-2	45	CA_ML_18_MNIA  	0.0	Right Middle Cingulate Cortex   	 ---	34 
 17	-7	-21	65	CA_ML_18_MNIA  	0.0	Left SMA                        	 ---	19 
@@ -17,7 +17,7 @@
 25	29	-39	59	CA_ML_18_MNIA  	0.0	Right Postcentral Gyrus         	 ---	58 
 26	50	-20	42	CA_ML_18_MNIA  	0.0	Right Postcentral Gyrus         	 ---	58 
 27	-38	-27	69	CA_ML_18_MNIA  	0.0	Left Precentral Gyrus           	 ---	1  
-28	20	-29	60	CA_ML_18_MNIA	-1	unknown	0	0
+28	20	-29	60	CA_ML_18_MNIA	-1	unknown	0	0 (Left Precentral Gyrus)
 29	44	-8	57	CA_ML_18_MNIA  	0.0	Right Middle Frontal Gyrus      	 ---	8  
 30	-29	-43	61	CA_ML_18_MNIA  	0.0	Left Postcentral Gyrus          	 ---	57 
 31	10	-17	74	CA_ML_18_MNIA  	0.0	Right SMA                       	 ---	20 
@@ -117,7 +117,7 @@
 130	47	-50	29	CA_ML_18_MNIA  	0.0	Right Angular Gyrus             	 ---	66 
 131	-49	-42	1	CA_ML_18_MNIA  	0.0	Left Middle Temporal Gyrus      	 ---	85 
 132	-31	19	-19	CA_ML_18_MNIA  	0.0	Left Inferior Frontal Gyrus (p. Orbitalis)	 ---	15 
-133	-2	-35	31	CA_ML_18_MNIA	-1	unknown	0	0
+133	-2	-35	31	CA_ML_18_MNIA	-1	unknown	0	0 (Left Post Cingulate)
 134	-7	-71	42	CA_ML_18_MNIA  	0.0	Left Precuneus                  	 ---	67 
 135	11	-66	42	CA_ML_18_MNIA  	0.0	Right Precuneus                 	 ---	68 
 136	4	-48	51	CA_ML_18_MNIA  	0.0	Right Precuneus                 	 ---	68 
@@ -193,7 +193,7 @@
 209	36	22	3	CA_ML_18_MNIA  	0.0	Right Insula Lobe               	 ---	30 
 210	37	32	-2	CA_ML_18_MNIA  	0.0	Right Inferior Frontal Gyrus (p. Orbitalis)	 ---	16 
 211	34	16	-8	CA_ML_18_MNIA  	0.0	Right Insula Lobe               	 ---	30 
-212	-11	26	25	CA_ML_18_MNIA	-1	unknown	0	0
+212	-11	26	25	CA_ML_18_MNIA	-1	unknown	0	0 (Left Anterior Cingulate)
 213	-1	15	44	CA_ML_18_MNIA  	0.0	Left Middle Cingulate Cortex    	 ---	33 
 214	-28	52	21	CA_ML_18_MNIA  	0.0	Left Middle Frontal Gyrus       	 ---	7  
 215	0	30	27	CA_ML_18_MNIA  	0.0	Left Anterior Cingulate Cortex  	 ---	31 
@@ -202,12 +202,12 @@
 218	31	56	14	CA_ML_18_MNIA  	0.0	Right Superior Frontal Gyrus    	 ---	4  
 219	26	50	27	CA_ML_18_MNIA  	0.0	Right Middle Frontal Gyrus      	 ---	8  
 220	-39	51	17	CA_ML_18_MNIA  	0.0	Left Middle Frontal Gyrus       	 ---	7  
-221	2	-24	30	CA_ML_18_MNIA	-1	unknown	0	0
-222	6	-24	0	CA_ML_18_MNIA	-1	unknown	0	0
+221	2	-24	30	CA_ML_18_MNIA	-1	unknown	0	0 (Right Cingulate)
+222	6	-24	0	CA_ML_18_MNIA	-1	unknown	0	0 (Right Thalamus)
 223	-2	-13	12	CA_ML_18_MNIA  	0.0	Left Thalamus                   	 ---	77 
 224	-10	-18	7	CA_ML_18_MNIA  	0.0	Left Thalamus                   	 ---	77 
 225	12	-17	8	CA_ML_18_MNIA  	0.0	Right Thalamus                  	 ---	78 
-226	-5	-28	-4	CA_ML_18_MNIA	-1	unknown	0	0
+226	-5	-28	-4	CA_ML_18_MNIA	-1	unknown	0	0 (Left Thalamus)
 227	-22	7	-5	CA_ML_18_MNIA  	0.0	Left Putamen                    	 ---	73 
 228	-15	4	8	CA_ML_18_MNIA  	0.0	Left Putamen                    	 ---	73 
 229	31	-14	2	CA_ML_18_MNIA  	0.0	Right Putamen                   	 ---	74 
@@ -215,7 +215,7 @@
 231	29	1	4	CA_ML_18_MNIA  	0.0	Right Putamen                   	 ---	74 
 232	-31	-11	0	CA_ML_18_MNIA  	0.0	Left Putamen                    	 ---	73 
 233	15	5	7	CA_ML_18_MNIA  	1.0	Right Pallidum                  	 ---	76 
-234	9	-4	6	CA_ML_18_MNIA	-1	unknown	0	0
+234	9	-4	6	CA_ML_18_MNIA	-1	unknown	0	0 (Right Thalamus)
 235	54	-43	22	CA_ML_18_MNIA  	0.0	Right Superior Temporal Gyrus   	 ---	82 
 236	-56	-50	10	CA_ML_18_MNIA  	0.0	Left Middle Temporal Gyrus      	 ---	85 
 237	-55	-40	14	CA_ML_18_MNIA  	0.0	Left Middle Temporal Gyrus      	 ---	85 
